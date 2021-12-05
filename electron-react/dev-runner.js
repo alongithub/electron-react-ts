@@ -44,83 +44,101 @@ function startElectron() {
 
 
 /* render */
-rendererConfig.mode = "development";
-const renderCompiler = webpack(rendererConfig);
+function startMain() {
+  return new Promise((resolve, reject) =>  {
+    rendererConfig.mode = "development";
+    const renderCompiler = webpack(rendererConfig);
+    
+    // const renderCompiler = webpack(rendererConfig, (err, stats) => {
+    //   if (err) {
+    //     console.log(errorLog + err.stack || err)
+    //   }
+    //   else if (stats.hasErrors()) {
+    //     console.log(errorLog, stats.toString({
+    //       chunks: false,
+    //       colors: true
+    //     }))
+    //     // .split(/\r?\n/)
+    //     // .forEach(line => {
+    //     //   err += `    ${line}\n`
+    //     // })
+    //     // console.log(err)
+    //     process.exit(1);
+    //   } else {
+    //     // console.log(doneLog)
+    //     console.log(stats.toString({
+    //       chunks: false,
+    //       colors: true
+    //     }))
+    //     // console.log(okayLog)
+    //   }
+    // })
+    
+    // hotMiddleware = webpackHotMiddleware(renderCompiler, {
+    //   log: false,
+    //   heartbeat: 2500,
+    // })
+    
+    const server = new WebpackDevServer(
+      {
+        compress: true,
+        port: 9090,
+        // contentBase: path.join(__dirname, '../'),
+        // quiet: true,
+        // before(app, ctx) {
+        //   app.use(hotMiddleware)
+        //   ctx.middleware.waitUntilValid(() => {
+        //     resolve()
+        //   })
+        // }
+      },
+      renderCompiler,
+    
+    )
+    server.start()
+    resolve();
+  })
+}
 
-// const renderCompiler = webpack(rendererConfig, (err, stats) => {
-//   if (err) {
-//     console.log(errorLog + err.stack || err)
-//   }
-//   else if (stats.hasErrors()) {
-//     console.log(errorLog, stats.toString({
-//       chunks: false,
-//       colors: true
-//     }))
-//     // .split(/\r?\n/)
-//     // .forEach(line => {
-//     //   err += `    ${line}\n`
-//     // })
-//     // console.log(err)
-//     process.exit(1);
-//   } else {
-//     // console.log(doneLog)
-//     console.log(stats.toString({
-//       chunks: false,
-//       colors: true
-//     }))
-//     // console.log(okayLog)
-//   }
-// })
-
-// hotMiddleware = webpackHotMiddleware(renderCompiler, {
-//   log: false,
-//   heartbeat: 2500,
-// })
-
-const server = new WebpackDevServer(
-  {
-    compress: true,
-    port: 9090,
-    // contentBase: path.join(__dirname, '../'),
-    // quiet: true,
-    // before(app, ctx) {
-    //   app.use(hotMiddleware)
-    //   ctx.middleware.waitUntilValid(() => {
-    //     resolve()
-    //   })
-    // }
-  },
-  renderCompiler,
-
-)
-server.start()
 
 /* main */
-mainConfig.mode = 'development'
-const mainCompiler = webpack(mainConfig);
+function startRender() {
+  return new Promise((resolve, reject) => {
+    mainConfig.mode = 'development'
+    const mainCompiler = webpack(mainConfig);
 
-console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+    console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 
-mainCompiler.watch({}, (err, stats) => {
-  if (err) {
-    console.log(err)
-    return
-  }
+    mainCompiler.watch({}, (err, stats) => {
+      if (err) {
+        console.log(err)
+        return
+      }
 
-  // logStats('Main', stats)
+      // logStats('Main', stats)
 
-  if (electronProcess && electronProcess.kill) {
-    manualRestart = true
-    process.kill(electronProcess.pid)
-    electronProcess = null
+      if (electronProcess && electronProcess.kill) {
+        manualRestart = true
+        process.kill(electronProcess.pid)
+        electronProcess = null
+        startElectron()
+
+        setTimeout(() => {
+          manualRestart = false
+        }, 5000)
+      }
+
+      resolve()
+    })
+  })
+}
+
+function init() {
+  Promise.all([startMain(), startRender()]).then(res => {
     startElectron()
+  })
+}
 
-    setTimeout(() => {
-      manualRestart = false
-    }, 5000)
-  }
+init();
 
-  // resolve()
-})
-
-startElectron();
+// startElectron();
