@@ -1,0 +1,13 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background: #f7f7f7;
+}
+
+#root{
+  height: 100%;
+  width: 100%;
+}
