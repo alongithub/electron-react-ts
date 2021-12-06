@@ -1,15 +1,12 @@
-import React, { useCallback, useState } from 'react';
-import { Button, Modal, Form, Input } from 'antd';
-import { SettingOutlined } from '@ant-design/icons';
+import React, { useCallback, useState, useEffect } from 'react';
+import { Button, Modal, Form, Input, message } from 'antd';
+import { setServerList } from './redux/serverAction';
+import { connect } from 'react-redux';
 
 // 新建部署服务器
-export default () => {
+const AddServer = ({ setServerList, id, serverList }) => {
 
-  const [config, setConfig] = useState({
-    name: '',
-    ip: '',
-    serverId: 0,
-  })
+  const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
 
   const showAddModel = useCallback(() => {
@@ -17,11 +14,18 @@ export default () => {
   }, [])
 
   const hideAddModel = useCallback(() => {
+    form.resetFields();
     setVisible(false);
+
   }, [])
 
   const handleOk = () => {
-    alert('保存')
+    const value = form.getFieldsValue();
+    console.log(value);
+    value.id = serverList.length ? serverList[serverList.length - 1].id + 1 : 1;
+    setServerList([...serverList, value]);
+    message.success(id ? '服务器保存成功' : '服务器创建成功');
+    hideAddModel()
   }
 
   const testConnect = () => {
@@ -31,8 +35,9 @@ export default () => {
   return <>
     <Button onClick={showAddModel}>新建服务器</Button>
 
-    <Modal destroyOnClose centered title="新建部署服务器" visible={visible} onOk={handleOk} onCancel={hideAddModel} cancelText="取消" okText="新建">
+    <Modal getContainer={false} destroyOnClose centered title="新建部署服务器" visible={visible} onOk={handleOk} onCancel={hideAddModel} cancelText="取消" okText="新建">
       <Form
+        form={form}
         name="basic"
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 16 }}
@@ -41,41 +46,64 @@ export default () => {
       >
         <Form.Item
           label="名称"
-          name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          name="name"
+          rules={[{ required: true, message: '请输入服务器名称!' }]}
         >
           <Input placeholder="请输入服务器名称" />
         </Form.Item>
         <Form.Item
           label="IP"
-          name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          name="ip"
+          rules={[{ required: true, message: '请输入服务器ip!' }]}
         >
           <Input placeholder="请输入服务器IP" />
         </Form.Item>
         <Form.Item
           label="端口"
-          name="username"
-          rules={[{ required: true, message: 'Please input your ip!' }]}
+          name="port"
+          rules={[{ required: true, message: '请输入服务器端口!' }]}
         >
           <Input placeholder="请输入服务器端口" />
         </Form.Item>
         <Form.Item
           label="用户名"
           name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[{ required: true, message: '请输入用户名!' }]}
         >
           <Input placeholder="请输入用户名" />
         </Form.Item>
         <Form.Item
           label="密码"
-          name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          name="password"
+          rules={[{ required: true, message: '请输入密码!' }]}
         >
-          <Input.Password placeholder="请输入用户名" />
+          <Input.Password placeholder="请输入密码" />
+        </Form.Item>
+        <Form.Item
+          label="Path"
+          name="path"
+          rules={[{ required: true, message: '请输入部署地址!' }]}
+        >
+          <Input placeholder="请输入部署地址" />
         </Form.Item>
 
       </Form>
     </Modal>
   </>
 }
+
+const mapState = state => {
+  return {
+    serverList: state.server.list,
+  }
+}
+
+const mapDispatch = dispatch => {
+  return {
+    setServerList(list) {
+      dispatch(setServerList(list))
+    }
+  }
+}
+
+export default connect(mapState, mapDispatch)(AddServer)

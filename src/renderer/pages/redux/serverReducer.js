@@ -4,8 +4,8 @@ const initstate = {
 
 const reducer = (state = initstate, action) => {
   switch (action.type) {
-    case "virtual_set_list": {
-      console.log("virtual_set_list")
+    case "server_set_list": {
+      console.log("server_set_list")
       return {
         ...state,
         list: action.list,

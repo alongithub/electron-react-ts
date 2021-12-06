@@ -1,17 +1,11 @@
-import React, { useCallback, useState } from 'react';
-import {connect} from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { Button, Modal, Form, Input, Select, message } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { setVirtualList } from './redux/virtualAction.js';
 
 // 新建虚拟机
-const AddVirtual = ({virtualList, setVirtualList, id}) => {
-
-  const [config, setConfig] = useState({
-    name: '',
-    ip: '',
-    serverId: 0,
-  })
+const AddVirtual = ({ virtualList, setVirtualList, id, serverList }) => {
 
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
@@ -21,7 +15,9 @@ const AddVirtual = ({virtualList, setVirtualList, id}) => {
   }, [])
 
   const hideAddModel = useCallback(() => {
+    form.resetFields();
     setVisible(false);
+
   }, [])
 
   const handleOk = () => {
@@ -29,8 +25,8 @@ const AddVirtual = ({virtualList, setVirtualList, id}) => {
     console.log(value);
     value.id = virtualList.length ? virtualList[virtualList.length - 1].id + 1 : 1;
     setVirtualList([...virtualList, value]);
-    message.success(id ? '虚拟机保存成功': '虚拟机创建成功');
-    setVisible(false);
+    message.success(id ? '虚拟机保存成功' : '虚拟机创建成功');
+    hideAddModel();
   }
 
   const testConnect = () => {
@@ -52,25 +48,35 @@ const AddVirtual = ({virtualList, setVirtualList, id}) => {
         <Form.Item
           label="名称"
           name="name"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[{ required: true, message: '请填写虚拟机名称!' }]}
         >
           <Input placeholder="请输入虚拟机名称" />
         </Form.Item>
         <Form.Item
           label="IP"
           name="ip"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[{ required: true, message: '请填写虚拟机ip地址!' }]}
         >
           <Input placeholder="请输入虚拟机IP" addonAfter={<SettingOutlined onClick={testConnect} />} />
         </Form.Item>
         <Form.Item
+          label="Url"
+          name="url"
+          rules={[{ required: true, message: '请填写请求地址!' }]}
+        >
+          <Input placeholder="请输入请求地址" />
+        </Form.Item>
+        <Form.Item
           name="serverId"
           label="部署服务器"
-          rules={[{ required: true, message: 'Please select your country!' }]}
+          rules={[{ required: true, message: '请选择部署服务器!' }]}
         >
           <Select placeholder="请选择部署服务器">
-            <Select.Option value="china">dbj</Select.Option>
-            <Select.Option value="usa">along</Select.Option>
+            {
+              serverList.map(l => {
+                return <Select.Option key={l.id} value={l.id}>{l.name}</Select.Option>
+              })
+            }
           </Select>
         </Form.Item>
 
@@ -82,9 +88,11 @@ const AddVirtual = ({virtualList, setVirtualList, id}) => {
 
 const mapState = (state) => ({
   virtualList: state.virtual.list,
+  serverList: state.server.list,
 })
 const mapDispatch = (dispatch) => ({
   setVirtualList(list) {
+    console.log("setVirtualList")
     dispatch(setVirtualList(list));
   }
 })

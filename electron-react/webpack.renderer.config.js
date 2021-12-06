@@ -69,6 +69,7 @@ module.exports = {
 
     filename: '[name].js',
     path: path.resolve('./dist/electron'),
+    publicPath: "/",
   },
   resolve: {
     extensions: ['.js', '.jsx'],

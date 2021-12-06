@@ -44,11 +44,11 @@ function startElectron() {
 
 
 /* render */
-function startMain() {
-  return new Promise((resolve, reject) =>  {
+function startRender() {
+  return new Promise((resolve, reject) => {
     rendererConfig.mode = "development";
     const renderCompiler = webpack(rendererConfig);
-    
+
     // const renderCompiler = webpack(rendererConfig, (err, stats) => {
     //   if (err) {
     //     console.log(errorLog + err.stack || err)
@@ -73,16 +73,20 @@ function startMain() {
     //     // console.log(okayLog)
     //   }
     // })
-    
+
     // hotMiddleware = webpackHotMiddleware(renderCompiler, {
     //   log: false,
     //   heartbeat: 2500,
     // })
-    
+
     const server = new WebpackDevServer(
       {
         compress: true,
         port: 9090,
+        hot: true,
+        historyApiFallback: {
+          disableDotRule: true,
+        }
         // contentBase: path.join(__dirname, '../'),
         // quiet: true,
         // before(app, ctx) {
@@ -93,7 +97,7 @@ function startMain() {
         // }
       },
       renderCompiler,
-    
+
     )
     server.start()
     resolve();
@@ -102,7 +106,7 @@ function startMain() {
 
 
 /* main */
-function startRender() {
+function startMain() {
   return new Promise((resolve, reject) => {
     mainConfig.mode = 'development'
     const mainCompiler = webpack(mainConfig);
