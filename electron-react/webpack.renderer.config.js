@@ -62,6 +62,21 @@ module.exports = {
             ]
           }
         }
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            // 将小于 1M 的图片通过base64打包到代码中
+            // 将大于 1M 的图片通过file-loader路径的形式引入
+            limit: 1000 * 1024,
+            // 指定输出文件路径
+            outputPath: 'images/',
+            name: '[name].[hash:5].[ext]',
+            publicPath: '', // 可以写cdn地址
+          }
+        }
       }
     ]
   },

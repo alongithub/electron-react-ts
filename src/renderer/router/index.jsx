@@ -7,7 +7,7 @@ import AddVirtial from '../pages/AddVirtial.jsx';
 import AddServer from '../pages/AddServer.jsx';
 import { getVirtualList } from '../pages/redux/virtualAction.js';
 import { getServerList } from '../pages/redux/serverAction.js';
-// import NoMatch from '../lib/nomatch';
+import NoMatch from '../lib/nomatch';
 
 const { Content, Sider } = Layout;
 
@@ -30,35 +30,7 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-const RouterLayout = connect(mapState, mapDispatch)(({ children, serverList, virtualList, getVirtualList, getServerList }) => {
-  let element = useRoutes([
-    { path: '/', element: <div >/</div> },
-    { path: 'dashboard', element: <div >dashboard</div> },
-    {
-      path: 'servers',
-      element: <div>servers</div>,
-      children: [
-        { path: ':id', element: <div >server id</div> },
-      ]
-    },
-    {
-      path: 'virtuals',
-      element: <div>virtuals</div>,
-      children: [
-        { path: ':id', element: <div >virtual id</div> },
-      ]
-    },
-    // 重定向
-    { path: 'home', redirectTo: '/' },
-    // 404找不到
-    { path: '*', element: <div>not found</div> }
-  ]);
-
-  useEffect(() => {
-    getVirtualList();
-    getServerList();
-  }, [])
-
+const Menus = () => {
   return <Layout style={{ height: '100%' }}>
     <Layout>
       <Sider>
@@ -86,6 +58,9 @@ const RouterLayout = connect(mapState, mapDispatch)(({ children, serverList, vir
               })
             }
           </Menu.SubMenu>
+          <Menu.Item   >
+            <Link to="/asdas">404</Link>
+          </Menu.Item>
         </Menu>
       </Sider>
       <Content>
@@ -93,6 +68,38 @@ const RouterLayout = connect(mapState, mapDispatch)(({ children, serverList, vir
       </Content>
     </Layout>
   </Layout >
+}
+
+const RouterLayout = connect(mapState, mapDispatch)(({ children, serverList, virtualList, getVirtualList, getServerList }) => {
+  let element = useRoutes([
+    { path: '/', element: <div >/</div> },
+    { path: 'dashboard', element: <div >dashboard</div> },
+    {
+      path: 'servers',
+      element: <div>servers</div>,
+      children: [
+        { path: ':id', element: <div >server id</div> },
+      ]
+    },
+    {
+      path: 'virtuals',
+      element: <div>virtuals</div>,
+      children: [
+        { path: ':id', element: <div >virtual id</div> },
+      ]
+    },
+    // 重定向
+    { path: 'home', redirectTo: '/' },
+    // 404找不到
+    { path: '*', element: <NoMatch /> }
+  ]);
+
+  useEffect(() => {
+    getVirtualList();
+    getServerList();
+  }, [])
+
+  return element
 })
 
 const Router = () => {
