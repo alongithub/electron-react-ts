@@ -1,86 +1,25 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { useRoutes, BrowserRouter, Routes, Outlet, Link } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
-import { SearchOutlined, DesktopOutlined } from '@ant-design/icons';
-import AddVirtial from '../pages/AddVirtial.jsx';
-import AddServer from '../pages/AddServer.jsx';
-import { getVirtualList } from '../pages/redux/virtualAction.js';
-import { getServerList } from '../pages/redux/serverAction.js';
-import NoMatch from '../lib/nomatch';
+import React from 'react';
+import { useRoutes, BrowserRouter } from 'react-router-dom';
+import Menus from '@/layout/Menu'
+import NoMatch from '@/lib/nomatch'; // 设置别名后不支持vscode跳转，通过配置jsconfig后，支持文件跳转，不支持文件夹跳转
 
-const { Content, Sider } = Layout;
-
-
-const mapState = (state) => {
-  return {
-    virtualList: state.virtual.list,
-    serverList: state.server.list,
-  }
-}
-
-const mapDispatch = (dispatch) => {
-  return {
-    getVirtualList() {
-      dispatch(getVirtualList());
-    },
-    getServerList() {
-      dispatch(getServerList());
-    }
-  }
-}
-
-const Menus = () => {
-  return <Layout style={{ height: '100%' }}>
-    <Layout>
-      <Sider>
-        <AddVirtial />
-        <AddServer />
-        <Menu
-          mode="inline"
-          theme="dark"
-        >
-          <Menu.SubMenu key="2" icon={<DesktopOutlined />} title="服务器">
-            {
-              serverList.map((l, i) => {
-                return <Menu.Item key={"server" + i} icon={<DesktopOutlined />}>
-                  <Link to={"/servers/" + l.id}>{l.name}</Link>
-                </Menu.Item>
-              })
-            }
-          </Menu.SubMenu>
-          <Menu.SubMenu key="1" icon={<DesktopOutlined />} title="虚拟机">
-            {
-              virtualList.map((l, i) => {
-                return <Menu.Item key={'virtual' + i} icon={<DesktopOutlined style={{ color: 'yellowgreen' }} />}>
-                  <Link to={"/virtuals/" + l.id}>{l.name}</Link>
-                </Menu.Item>
-              })
-            }
-          </Menu.SubMenu>
-          <Menu.Item   >
-            <Link to="/asdas">404</Link>
-          </Menu.Item>
-        </Menu>
-      </Sider>
-      <Content>
-        {element}
-      </Content>
-    </Layout>
-  </Layout >
-}
-
-const RouterLayout = connect(mapState, mapDispatch)(({ children, serverList, virtualList, getVirtualList, getServerList }) => {
+const RouterLayout = () => {
   let element = useRoutes([
-    { path: '/', element: <div >/</div> },
-    { path: 'dashboard', element: <div >dashboard</div> },
     {
-      path: 'servers',
-      element: <div>servers</div>,
+      path: '/',
+      element: <Menus />,
       children: [
-        { path: ':id', element: <div >server id</div> },
+        { path: 'servers/:id', element: <div >server id</div> }
       ]
     },
+    { path: 'dashboard', element: <div >dashboard</div> },
+    // {
+    //   path: 'servers',
+    //   element: <div>servers</div>,
+    //   children: [
+    //     { path: ':id', element: <div >server id</div> },
+    //   ]
+    // },
     {
       path: 'virtuals',
       element: <div>virtuals</div>,
@@ -94,13 +33,8 @@ const RouterLayout = connect(mapState, mapDispatch)(({ children, serverList, vir
     { path: '*', element: <NoMatch /> }
   ]);
 
-  useEffect(() => {
-    getVirtualList();
-    getServerList();
-  }, [])
-
   return element
-})
+}
 
 const Router = () => {
   return <BrowserRouter>

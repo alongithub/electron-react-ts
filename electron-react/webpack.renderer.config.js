@@ -87,6 +87,9 @@ module.exports = {
     publicPath: "/",
   },
   resolve: {
+    alias: {
+      '@': path.join(__dirname, '../src/renderer'),
+    },
     extensions: ['.js', '.jsx'],
     fallback: {
       path: require.resolve("path-browserify"),
