@@ -1,39 +1,30 @@
-import React from 'react';
-import './style.less';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import notFound from './images/404.png';
+import './style.less';
 
-export default class NoMatch extends React.Component {
-    state = {
-        time: 3,
-    };
+export default () => {
+  const [time, setTime] = useState(3);
+  const navigate = useNavigate();
 
-    componentDidMount() {
-        this.timer = setInterval(this.countdown, 1000);
-    }
+  useEffect(() => {
+    setTimeout(() => {
+      if (time <= 1) {
+        navigate(-1);
+      } else {
+        setTime(time => time - 1);
+      }
+    }, 1000)
 
-    countdown = () => {
-        const {time} = this.state;
-        const {history} = this.props;
-        if (time <= 0) {
-            clearInterval(this.timer);
-            history.goBack();
-        } else {
-            this.setState({
-                time: time - 1,
-            });
-        }
-    };
+  }, [time])
 
-    render() {
-        const {time} = this.state;
-        return (
-            <div className="noMatch">
-                <img src={notFound} alt=""/>
-                <div>
-                    <p>页面丢失了，请进行其他操作</p>
-                    <p>{time}秒后返回上一级</p>
-                </div>
-            </div>
-        );
-    }
+  return (
+    <div className="noMatch">
+      <img src={notFound} alt="" />
+      <div>
+        <p>页面丢失了，请进行其他操作</p>
+        <p>{time}秒后返回上一级</p>
+      </div>
+    </div>
+  );
 }
