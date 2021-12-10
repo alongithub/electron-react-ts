@@ -83,10 +83,15 @@ function startRender() {
       {
         compress: true,
         port: 9090,
+        // progress: true,
+        // contentBase: './build',
         hot: true,
         historyApiFallback: {
           disableDotRule: true,
-        }
+        },
+        // onBeforeSetupMiddleware(devServer) {
+        //   devServer.app.use(hotMiddleware)
+        // },
         // contentBase: path.join(__dirname, '../'),
         // quiet: true,
         // before(app, ctx) {
@@ -95,6 +100,13 @@ function startRender() {
         //     resolve()
         //   })
         // }
+        client: {
+          overlay: true,
+          // {
+          //   warnings: true,
+          //   errors: true,
+          // },
+        },
       },
       renderCompiler,
 

@@ -1,6 +1,7 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Modal, Form, Input, message } from 'antd';
-import { setServerList } from './redux/serverAction';
+import { setServerList } from '../redux/serverAction';
 import { connect } from 'react-redux';
 
 // 新建部署服务器

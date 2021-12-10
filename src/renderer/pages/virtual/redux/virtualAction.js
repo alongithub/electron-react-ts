@@ -1,5 +1,5 @@
 
-import ENV from '../../ENV';
+import ENV from '../../../ENV';
 const ElectronStore = window.require('electron-store');
 
 // const ElectronStore = class {
@@ -13,6 +13,8 @@ const ElectronStore = window.require('electron-store');
 const virtualStore = new ElectronStore({
   name: ENV.VIRTUAL_STORE,
 })
+
+window.virtualStore = virtualStore
 
 export const setVirtualList = (list) => {
   virtualStore.set('list', list);

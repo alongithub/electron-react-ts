@@ -1,5 +1,5 @@
 
-import ENV from '../../ENV';
+import ENV from '../../../ENV';
 const ElectronStore = window.require('electron-store');
 
 const serverStore = new ElectronStore({

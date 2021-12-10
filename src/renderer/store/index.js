@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import virtualReducer from '../pages/redux/virtualReducer';
-import serverReducer from '../pages/redux/serverReducer';
+import virtualReducer from '../pages/virtual/redux/virtualReducer';
+import serverReducer from '../pages/server/redux/serverReducer';
 import thunk from './reduxThunk.js';
 
 const states = {

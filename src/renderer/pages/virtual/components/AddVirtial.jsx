@@ -2,13 +2,27 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, Form, Input, Select, message } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import { setVirtualList } from './redux/virtualAction.js';
+import { setVirtualList } from '../redux/virtualAction.js';
 
 // 新建虚拟机
-const AddVirtual = ({ virtualList, setVirtualList, id, serverList }) => {
+const AddVirtual = ({ virtualList, setVirtualList, id, serverList, text = '新建', buttonProps = {} }) => {
 
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (visible) {
+      if (id) {
+        let editVirtualId = virtualList.findIndex(l => {
+          return l.id === id
+        })
+        if (editVirtualId > -1) {
+          form.setFieldsValue(virtualList[editVirtualId])
+        }
+      }
+    }
+
+  }, [visible, id])
 
   const showAddModel = useCallback(() => {
     setVisible(true);
@@ -23,8 +37,27 @@ const AddVirtual = ({ virtualList, setVirtualList, id, serverList }) => {
   const handleOk = () => {
     const value = form.getFieldsValue();
     console.log(value);
-    value.id = virtualList.length ? virtualList[virtualList.length - 1].id + 1 : 1;
-    setVirtualList([...virtualList, value]);
+    let list = [...virtualList];
+    let server = serverList.find(l => {
+      return l.id === value.serverId
+    })
+    if (server) {
+      value.servername = server.name
+    }
+    if (!id) {
+      value.id = virtualList.length ? virtualList[virtualList.length - 1].id + 1 : 1;
+      list.push(value);
+    } else {
+      let editVirtualId = virtualList.findIndex(l => {
+        return l.id === id
+      })
+      value.id = id;
+      if (editVirtualId > -1) {
+        list[editVirtualId] = value;
+      }
+    }
+
+    setVirtualList(list);
     message.success(id ? '虚拟机保存成功' : '虚拟机创建成功');
     hideAddModel();
   }
@@ -34,9 +67,9 @@ const AddVirtual = ({ virtualList, setVirtualList, id, serverList }) => {
   }
 
   return <>
-    <Button onClick={showAddModel}>新建</Button>
+    <Button onClick={showAddModel} {...buttonProps}>{text}</Button>
 
-    <Modal destroyOnClose title="新建虚拟机" visible={visible} onOk={handleOk} onCancel={hideAddModel} cancelText="取消" okText="新建">
+    <Modal destroyOnClose title="新建虚拟机" visible={visible} onOk={handleOk} onCancel={hideAddModel} cancelText="取消" okText={id ? "保存" : "新建"}>
       <Form
         form={form}
         name="basic"
