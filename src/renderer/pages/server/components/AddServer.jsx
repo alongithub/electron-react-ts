@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Button, Modal, Form, Input, message } from 'antd';
 import { setServerList } from '../redux/serverAction';
 import { connect } from 'react-redux';
@@ -27,10 +26,6 @@ const AddServer = ({ setServerList, id, serverList }) => {
     setServerList([...serverList, value]);
     message.success(id ? '服务器保存成功' : '服务器创建成功');
     hideAddModel()
-  }
-
-  const testConnect = () => {
-    alert('测试')
   }
 
   return <>

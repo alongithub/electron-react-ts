@@ -101,11 +101,10 @@ function startRender() {
         //   })
         // }
         client: {
-          overlay: true,
-          // {
-          //   warnings: true,
-          //   errors: true,
-          // },
+          overlay: {
+            warnings: false,
+            errors: true,
+          },
         },
       },
       renderCompiler,

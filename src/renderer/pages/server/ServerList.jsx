@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import AddServer from './components/AddServer';
 import { getServerList } from './redux/serverAction';
 import { Table, Button } from 'antd';

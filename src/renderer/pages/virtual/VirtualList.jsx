@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, Table } from 'antd';
+import { Table } from 'antd';
 import { PlusOutlined } from '@ant-design/icons'
-import AddVirtial from './components/AddVirtial.jsx';
+import AddVirtial from './components/AddVirtial';
+import Publish from './components/Publish';
 import { getVirtualList } from './redux/virtualAction';
 import { getServerList } from '@/pages/server/redux/serverAction';
 
@@ -35,7 +35,7 @@ const columns = [
     render: (item, record) => {
       return <div>
         <AddVirtial text="编辑" id={record.id} buttonProps={{ type: 'link' }} />
-        <Publish />
+        <Publish url={record.ip} path={record.url} />
       </div>
     }
   }
