@@ -54,10 +54,10 @@ const buildConfig = {
   },
   "nsis": {
     "shortcutName": "electron-react-nsis",
-    // "oneClick": false,
-    // "allowElevation": true,
-    // "allowToChangeInstallationDirectory": true,
-    // "perMachine": true,
+    "oneClick": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": true,
+    "perMachine": true,
   },
   "dmg": {
     "title": "elctron-react-dmg-title"
