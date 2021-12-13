@@ -1,3 +1,5 @@
+process.env.NODE_ENV = "development";
+
 const electron = require('electron');
 const path = require('path');
 const webpack = require('webpack');
@@ -11,7 +13,7 @@ const rendererConfig = require('./webpack.renderer.config');
 let electronProcess = null;
 let manualRestart = false
 
-process.env.NODE_ENV = "development";
+
 
 function startElectron() {
   var args = [

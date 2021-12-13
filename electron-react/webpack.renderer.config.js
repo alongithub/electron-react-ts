@@ -1,6 +1,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const _isDevelopment = process.env.NODE_ENV === "development";
+
+console.log('isdevelopment', _isDevelopment, process.env.NODE_ENV);
+
 module.exports = {
   mode: 'production',
   entry: {
@@ -95,7 +99,7 @@ module.exports = {
 
     filename: '[name].js',
     path: path.resolve('./dist/electron'),
-    publicPath: "/",
+    publicPath: _isDevelopment ? "/" : "./",
   },
   resolve: {
     alias: {
