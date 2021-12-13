@@ -7,23 +7,44 @@ const {
   BrowserWindow
 } = require('electron')
 
+const _isDevelopment = process.env.NODE_ENV === 'development';
+const _isProduction = process.env.NODE_ENV === 'production';
+
 let url;
-if (process.env.NODE_ENV === 'development') {
+if (_isDevelopment) {
   url = 'http://localhost:9090/';
 } else {
   url = 'file://' + path.join(__dirname, '/index.html');
 
 }
 
+let mainWindow;
 
+// development 情况下不做单例限制，主要是考虑开发时可能同时运行两个electron的dev环境
+if (checkInstance() || _isDevelopment) {
+  initApp()
+} else {
+  console.log('实例已存在')
+  app.quit();
+}
 
-app.on('ready', () => {
-  console.log('%color:')
-  createWindow(url);
-});
+function initApp() {
+  app.on('ready', () => {
+    console.log('%color:')
+    createWindow(url);
+  });
+
+  app.on('second-instance', () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      }
+    }
+  })
+}
 
 function createWindow(url) {
-  this.mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1020,
     height: 650,
     // resizable: false,
@@ -35,7 +56,7 @@ function createWindow(url) {
     center: true,
     show: true,
     // frame: false,
-    // autoHideMenuBar: true,
+    autoHideMenuBar: true,
     // alwaysOnTop: false,
     // titleBarStyle: 'hidden',
     webPreferences: {
@@ -44,5 +65,10 @@ function createWindow(url) {
       // preload: path.join(__dirname, `../inject/preload.js`)
     }
   });
-  this.mainWindow.loadURL(url);
+  mainWindow.loadURL(url);
+}
+
+function checkInstance() {
+  const gotTheLock = app.requestSingleInstanceLock();
+  return gotTheLock;
 }
