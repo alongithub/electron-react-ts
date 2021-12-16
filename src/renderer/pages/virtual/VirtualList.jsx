@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Table } from 'antd';
 import { PlusOutlined } from '@ant-design/icons'
 import AddVirtial from './components/AddVirtial';
+import TestIPC from './components/TestIPC';
 import Publish from './components/Publish';
 import { getVirtualList } from './redux/virtualAction';
 import { getServerList } from '@/pages/server/redux/serverAction';
@@ -54,6 +55,7 @@ const VirtualList = ({ virtualList, getVirtualList, getServerList }) => {
         icon: <PlusOutlined />,
         type: "primary"
       }} />
+      <TestIPC />
     </div>
     <div className="layout_content">
       <Table rowKey='id' size="middle" style={{ height: '100%' }} dataSource={virtualList} columns={columns} />;

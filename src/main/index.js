@@ -3,6 +3,7 @@ const path = require('path');
 const Store = require('electron-store');
 Store.initRenderer()
 const {
+  ipcMain,
   app,
   BrowserWindow
 } = require('electron')
@@ -32,6 +33,8 @@ function initApp() {
   app.on('ready', () => {
     console.log('%color:')
     createWindow(url);
+
+    initListener();
   });
 
   app.on('second-instance', () => {
@@ -71,4 +74,13 @@ function createWindow(url) {
 function checkInstance() {
   const gotTheLock = app.requestSingleInstanceLock();
   return gotTheLock;
+}
+
+function initListener() {
+  ipcMain.on('console', (e, text) => {
+    debugger
+    console.log(2)
+    console.log(2)
+    console.log(text);
+  })
 }

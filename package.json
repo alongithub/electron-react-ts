@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "build": "node electron-react/build.js && electron-builder --config electron-react/electron-builder.config.js",
-    "dev": "node electron-react/dev-runner.js"
+    "dev": "node electron-react/dev-runner.js",
+    "debug": "node electron-react/dev-debug.js"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
