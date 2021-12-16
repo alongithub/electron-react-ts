@@ -20,3 +20,10 @@
       publicPath: _isDevelopment ? "/" : "./",
     },
     ```
+
+#### mac 图标icns文件制作
+创建 .iconset后缀的文件夹，并将 icon_256x256.png 放入其中
+执行
+```
+iconutil -c icns icons.iconset -o icon.icns
+```
