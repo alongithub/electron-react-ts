@@ -21,7 +21,7 @@ module.exports = {
     'react',
   ],
   'rules': {
-    'no-unused-vars': 1,
+    // 'no-unused-vars': 0,
 
     'default-case-last': ['off'],
     'grouped-accessor-pairs': ['off'],

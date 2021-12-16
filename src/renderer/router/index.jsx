@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRoutes, BrowserRouter, HashRouter } from 'react-router-dom';
+import { useRoutes, HashRouter } from 'react-router-dom';
 import VirtualList from "@/pages/virtual/VirtualList"
 import ServerList from "@/pages/server/ServerList"
 import Menus from '@/layout/Menu'
