@@ -70,6 +70,4 @@ vscode 运行和调试中 先执行 Run Debug 后执行 Debug Main Process
 
 #### 测试 gitlab 代码同步
 
-测试
-
-
+测试推送
