@@ -68,4 +68,6 @@ vscode 运行和调试中 先执行 Run Debug 后执行 Debug Main Process
 
 通过访问 chrome://inspect 来连接 Chrome 并在那里选择需要检查的Electron 应用程序
 
+#### 测试 gitlab 代码同步
+
 
